@@ -1,0 +1,15 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, CreateDateColumn } from 'typeorm';
+import { Client } from '../../clients/entities/client.entity';
+import { OrderItem } from './order-item.entity';
+
+@Entity('customer_orders')
+export class CustomerOrder {
+  @PrimaryGeneratedColumn() id: number;
+  @Column({ default: 'CREATED' }) status: string;
+  @Column('decimal', { precision: 12, scale: 2, default: 0 }) total: string;
+  @CreateDateColumn() createdAt: Date;
+  @ManyToOne(() => Client, (c) => c.orders, { onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'clientId' }) client: Client;
+  @Column() clientId: number;
+  @OneToMany(() => OrderItem, (i) => i.order) items: OrderItem[];
+}
